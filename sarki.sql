@@ -104,8 +104,8 @@ MariaDB [odev]> SELECT * FROM icra;
 6-) Şarkı kayıtlarını şarkı adına göre artan sırada listeleyiniz.
 
 MariaDB [odev]> SELECT * 
-			 -> FROM sarki 
-			 -> ORDER BY adi ASC;
+	     -> FROM sarki 
+	     -> ORDER BY adi ASC;
 +---------+---------------------+---------+---------+-----------+---------+
 | sarkino | adi                 | turu    | uzunluk | bestecino | yazarno |
 +---------+---------------------+---------+---------+-----------+---------+
@@ -127,18 +127,18 @@ MariaDB [odev]> SELECT *
   sarkicino, ad, ve soyadlarını listeleyiniz.
 
 MariaDB [odev]> WITH getir_sarki(sarkino) 
-	->				AS (SELECT sarkino 
-    ->       		FROM besteci,sarki 
-    ->   	   	    WHERE besteci.adi='orhan'AND 
-    ->     				  besteci.soyadi='gencebay' AND 
-    ->     				  besteci.bestecino=sarki.bestecino),
-    -> 			getir_sarkici(sarkicino) 
-	->				AS (SELECT sarkicino 
-    ->      			FROM getir_sarki,icra 
-    ->   			    WHERE getir_sarki.sarkino=icra.sarkino) 
-    -> 			SELECT DISTINCT sarkici.sarkicino,adi,soyadi 
-    -> 			FROM sarkici,getir_sarkici  
-    -> 			WHERE sarkici.sarkicino = getir_sarkici.sarkicino; 
+    ->		   AS (SELECT sarkino 
+    ->       	       FROM besteci,sarki 
+    ->   	       WHERE besteci.adi='orhan'AND 
+    ->     		     besteci.soyadi='gencebay' AND 
+    ->     		     besteci.bestecino=sarki.bestecino),
+    -> 		 getir_sarkici(sarkicino) 
+    ->		   AS (SELECT sarkicino 
+    ->      	       FROM getir_sarki,icra 
+    ->   	       WHERE getir_sarki.sarkino=icra.sarkino) 
+    -> 		SELECT DISTINCT sarkici.sarkicino,adi,soyadi 
+    -> 		FROM sarkici,getir_sarkici  
+    -> 		WHERE sarkici.sarkicino = getir_sarkici.sarkicino; 
 +-----------+----------+----------+
 | sarkicino | adi      | soyadi   |
 +-----------+----------+----------+
@@ -156,23 +156,23 @@ MariaDB [odev]> WITH getir_sarki(sarkino)
   yazarlığını yapmış söz yazarlarının ad ve soyadlarını listeleyiniz.
 
 MariaDB [odev]> WITH sarki_n(sarkino) 
-					AS (SELECT sarkino
-    ->           		FROM sarkici,icra 
-    ->   			    WHERE sarkici.adi='muzeyyen' AND 
-    -> 						  sarkici.soyadi='senar' AND 
-    -> 						  sarkici.sarkicino= icra.sarkicino),
-    -> 			yazar_n(yazarno)      
-	->				AS (SELECT yazarno 
-    ->   				FROM sarki_n,sarki 
-    ->   				WHERE sarki_n.sarkino=sarki.sarkino) 
-    -> 			SELECT adi,soyadi 
-    -> 			FROM yazar_n ,sozyazari 
-    -> 			WHERE yazar_n.yazarno=sozyazari.yazarno 
-    -> 			UNION  
-    -> 			SELECT sozyazari.adi,sozyazari.soyadi 
-    -> 			FROM sarki,sozyazari 
-    -> 			WHERE turu='sanat' AND 
-    ->       		  sarki.yazarno = sozyazari.yazarno;
+    ->		   AS (SELECT sarkino
+    ->                 FROM sarkici,icra 
+    ->   	       WHERE sarkici.adi='muzeyyen' AND 
+    -> 			     sarkici.soyadi='senar' AND 
+    -> 			     sarkici.sarkicino= icra.sarkicino),
+    -> 		yazar_n(yazarno)      
+    ->			AS (SELECT yazarno 
+    ->   		    FROM sarki_n,sarki 
+    ->   		    WHERE sarki_n.sarkino=sarki.sarkino) 
+    -> 		SELECT adi,soyadi 
+    -> 		FROM yazar_n ,sozyazari 
+    -> 		WHERE yazar_n.yazarno=sozyazari.yazarno 
+    ->		UNION  
+    -> 		SELECT sozyazari.adi,sozyazari.soyadi 
+    -> 		FROM sarki,sozyazari 
+    -> 		WHERE turu='sanat' AND 
+    ->                sarki.yazarno = sozyazari.yazarno;
 +------------+---------+
 | adi        | soyadi  |
 +------------+---------+
@@ -187,14 +187,14 @@ MariaDB [odev]> WITH sarki_n(sarkino)
   türünde şarkı bestelememiş bestecilerin ad ve soyadlarını listeleyiniz.
 
 MariaDB [odev]> SELECT besteci.adi, besteci.soyadi 
-    -> 			FROM sarki,besteci 
-    -> 			WHERE uzunluk>180 AND 
-    ->       		  besteci.bestecino=sarki.bestecino 
-    -> 			EXCEPT 
-    -> 			SELECT besteci.adi, besteci.soyadi 
-    -> 			FROM sarki,besteci 
-    -> 			WHERE turu='halk' AND 
-    ->      		  besteci.bestecino=sarki.bestecino;
+    -> 		FROM sarki,besteci 
+    -> 		WHERE uzunluk>180 AND 
+    ->       	      besteci.bestecino=sarki.bestecino 
+    -> 		EXCEPT 
+    -> 		SELECT besteci.adi, besteci.soyadi 
+    -> 		FROM sarki,besteci 
+    -> 		WHERE turu='halk' AND 
+    ->      	      besteci.bestecino=sarki.bestecino;
 +-------+--------+
 | adi   | soyadi |
 +-------+--------+
@@ -207,14 +207,14 @@ MariaDB [odev]> SELECT besteci.adi, besteci.soyadi
 10-) Tüm şarkıları icra eden şarkıcıların ad ve soyadlarını veriniz.
 
 MariaDB [odev]> SELECT adi,soyadi 
-    -> 			FROM sarkici 
-    -> 			WHERE NOT EXISTS 
-	->				 (SELECT sarkino 
-    ->   			  FROM sarki 
-    ->   			  EXCEPT 
-    ->   		      SELECT sarkino 
-    ->          	  FROM icra 
-    ->   			  WHERE icra.sarkicino = sarkici.sarkicino);
+    -> 		FROM sarkici 
+    -> 		WHERE NOT EXISTS 
+    ->			(SELECT sarkino 
+    ->   		 FROM sarki 
+    ->   		 EXCEPT 
+    ->   		 SELECT sarkino 
+    ->          	 FROM icra 
+    ->   		 WHERE icra.sarkicino = sarkici.sarkicino);
 +--------+----------+
 | adi    | soyadi   |
 +--------+----------+
@@ -228,16 +228,16 @@ MariaDB [odev]> SELECT adi,soyadi
    şarkıcıların ad ve soyadlarını listeleyiniz. 
 
 MariaDB [odev]> SELECT adi,soyadi 
-    -> 			FROM sarkici 
-    -> 			WHERE sarkicino IN 
-	-> 			 (SELECT sarkicino 
-    ->     		  FROM icra 
-    ->     		  WHERE sarkino IN
-	-> 			   (SELECT sarkino 
-    ->      		FROM icra,sarkici 
-    ->      		WHERE sarkici.adi='orhan' AND 
-    ->    		          sarkici.soyadi='gencebay' AND 
-    ->    				  icra.sarkicino=sarkici.sarkicino));
+    -> 		FROM sarkici 
+    -> 		WHERE sarkicino IN 
+    -> 		     (SELECT sarkicino 
+    ->     	      FROM icra 
+    ->     	      WHERE sarkino IN
+    -> 			   (SELECT sarkino 
+    ->      		    FROM icra,sarkici 
+    ->      		    WHERE sarkici.adi='orhan' AND 
+    ->    		    	  sarkici.soyadi='gencebay' AND 
+    ->    		          icra.sarkicino=sarkici.sarkicino));
 +--------+----------+
 | adi    | soyadi   |
 +--------+----------+
@@ -252,13 +252,13 @@ MariaDB [odev]> SELECT adi,soyadi
    şarkıların adlarını listeleyiniz.
 
 MariaDB [odev]> SELECT adi 
-    -> 			FROM sarki 
-    -> 			WHERE uzunluk NOT IN
-	-> 			 (SELECT uzunluk 
-    ->      	  FROM sarki,besteci 
-    ->     		  WHERE besteci.adi='umit' AND  
-    ->    				besteci.soyadi='mutlu' AND 
-    ->    				besteci.bestecino= sarki.bestecino);
+    -> 		FROM sarki 
+    -> 		WHERE uzunluk NOT IN
+    -> 		      (SELECT uzunluk 
+    ->      	       FROM sarki,besteci 
+    ->     	       WHERE besteci.adi='umit' AND  
+    ->    		     besteci.soyadi='mutlu' AND 
+    ->    		     besteci.bestecino= sarki.bestecino);
 +---------------------+
 | adi                 |
 +---------------------+
@@ -278,13 +278,13 @@ MariaDB [odev]> SELECT adi
    listeleyiniz.
 
 MariaDB [odev]> SELECT * 
-    -> 			FROM sarkici 
-    -> 			WHERE EXISTS 
-	-> 			 (SELECT * 
-    ->       	  FROM sarki,icra 
-    ->      	  WHERE sarki.turu='halk' AND 
-    ->     				icra.sarkino=sarki.sarkino AND 
-    ->                  icra.sarkicino = sarkici.sarkicino);
+    -> 		FROM sarkici 
+    -> 		WHERE EXISTS 
+    -> 		       (SELECT * 
+    ->       	  	FROM sarki,icra 
+    ->      	  	WHERE sarki.turu='halk' AND 
+    ->     		      icra.sarkino=sarki.sarkino AND 
+    ->                        icra.sarkicino = sarkici.sarkicino);
 +-----------+----------+----------+---------+
 | sarkicino | adi      | soyadi   | turu    |
 +-----------+----------+----------+---------+
@@ -301,17 +301,17 @@ MariaDB [odev]> SELECT *
    listeleyiniz.
 
 MariaDB [odev]> WITH aggr(sarkicino,top_uzunluk,ort_uzunluk,
-	-> 					  max_uzunluk,min_uzunluk,sarki_sayisi) 
-    ->    			AS (SELECT sarkicino,sum(uzunluk),avg(uzunluk),
-    ->       			  max(uzunluk),min(uzunluk),count(sarki.sarkino) 
-    ->        			FROM icra,sarki 
-    ->        			WHERE icra.sarkino = sarki.sarkino 
-    ->        			GROUP BY sarkicino) 
-    -> 			SELECT sarkici.sarkicino,sarkici.adi,sarkici.soyadi,
-	->				   aggr.top_uzunluk,ort_uzunluk,max_uzunluk,
-    ->        		   min_uzunluk,sarki_sayisi 
-    -> 			FROM sarkici,aggr 
-    -> 			WHERE aggr.sarkicino=sarkici.sarkicino;
+    -> 		          max_uzunluk,min_uzunluk,sarki_sayisi) 
+    ->    	   AS (SELECT sarkicino,sum(uzunluk),avg(uzunluk),
+    ->       		      max(uzunluk),min(uzunluk),count(sarki.sarkino) 
+    ->        	       FROM icra,sarki 
+    ->        	       WHERE icra.sarkino = sarki.sarkino 
+    ->        	       GROUP BY sarkicino) 
+    -> 		SELECT sarkici.sarkicino,sarkici.adi,sarkici.soyadi,
+    ->		       aggr.top_uzunluk,ort_uzunluk,max_uzunluk,
+    ->        	       min_uzunluk,sarki_sayisi 
+    -> 		FROM sarkici,aggr 
+    -> 		WHERE aggr.sarkicino=sarkici.sarkicino;
 +-----------+----------+----------+-------------+-------------+-------------+-------------+--------------+
 | sarkicino | adi      | soyadi   | top_uzunluk | ort_uzunluk | max_uzunluk | min_uzunluk | sarki_sayisi |
 +-----------+----------+----------+-------------+-------------+-------------+-------------+--------------+
@@ -328,11 +328,11 @@ MariaDB [odev]> WITH aggr(sarkicino,top_uzunluk,ort_uzunluk,
    bestelediği şarkı sayısını listeleyiniz.
 
 MariaDB [odev]> SELECT besteci.bestecino, besteci.adi, besteci.soyadi, 
-    ->        		   count(sarkino) AS sarki_sayisi 
-    -> 			FROM sarki,besteci 
-    -> 			WHERE besteci.bestecino = sarki.bestecino 
-    -> 			GROUP BY besteci.adi 
-    -> 			HAVING count(sarkino)>1;
+    ->        	       count(sarkino) AS sarki_sayisi 
+    -> 		FROM sarki,besteci 
+    -> 		WHERE besteci.bestecino = sarki.bestecino 
+    -> 		GROUP BY besteci.adi 
+    ->		HAVING count(sarkino)>1;
 +-----------+--------+----------+--------------+
 | bestecino | adi    | soyadi   | sarki_sayisi |
 +-----------+--------+----------+--------------+
